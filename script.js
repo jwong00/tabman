@@ -1,22 +1,25 @@
 // create list of windows
-var windows = browser.windows.getAll({
+var windowsPromise = browser.windows.getAll({
     populate: true,
     windowTypes: ["normal"]
 });
 
 
-console.log(windows)
+console.log(windowsPromise)
 
 //get from dom..
 var wl = document.querySelector("#win-list")
 console.log(wl)
 
-windows.then(listAllTabs,onError)
+let tl = document.createElement('div')
+tl.classList.add("tab-list")
 
-function listAllTabs(windows) {
-    for(window in windows) {
-         console.log(`iterating windows...${window}`)
-         console.log(`window: ${window.id}`)
+windowsPromise.then(listAllTabs,onError)
+
+function listAllTabs(browserWindows) {
+    for(browserWindow of browserWindows) {
+         console.log(`iterating windows...${browserWindow.title}`)
+         console.log(`window: ${browserWindow.id}`)
 
         //first tab should be window title, or maybe active tab?
         // let tl = document.createElement('div')
