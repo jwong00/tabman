@@ -18,8 +18,7 @@ windowsPromise.then(listAllTabs,onError)
 
 function listAllTabs(browserWindows) {
     for(browserWindow of browserWindows) {
-         console.log(`iterating windows...${browserWindow.title}`)
-         console.log(`window: ${browserWindow.id}`)
+         console.log(`${browserWindow.id} ${browserWindow.title}`)
 
         //first tab should be window title, or maybe active tab?
         // let tl = document.createElement('div')
