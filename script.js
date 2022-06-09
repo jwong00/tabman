@@ -11,8 +11,10 @@ console.log(windowsPromise)
 var wl = document.querySelector("#win-list")
 console.log(wl)
 
-let tl = document.createElement('div')
-tl.classList.add("tab-list")
+// let tl = document.createElement('div')
+// tl.classList.add("tab-list")
+
+// console.log(tl.classList[0])
 
 windowsPromise.then(listAllTabs,onError)
 
@@ -21,25 +23,28 @@ function listAllTabs(browserWindows) {
          console.log(`${browserWindow.id} ${browserWindow.title}`)
 
         //first tab should be window title, or maybe active tab?
-        // let tl = document.createElement('div')
-        // tl.classlist.add("tab-list")
+        let tl = document.createElement('div')
+        tl.classList.add("tab-list")
         //append to some struct in dom, list maybe?
         //start retrieving tabs
         //iterate over tabs:
-        // for(tab in window.tabs) {
-        //     let t = tab.title
-        //     let u = tab.url
+        for(tab of browserWindow.tabs) {
+            let t = tab.title
+            let u = tab.url
+            let i = tab.id
+            
+            let str = `${i} ${t} ${u}`
 
-        //     let str = `${t} <${u}>`
+            // console.log(`   ${str}`)
 
-        //     let entry = document.createElement('div')
-        //     entry.classlist.add('tab-entry')
-        //     entry.innerHTML = str
+            let entry = document.createElement('div')
+            entry.classList.add("tab-entry")
+            entry.innerHTML = str
 
-        //     tl.appendChild(entry)
-        // }
+            tl.appendChild(entry)
+        }
 
-        // wl.appendChild(tl)       
+        wl.appendChild(tl)       
     }
 }
 
