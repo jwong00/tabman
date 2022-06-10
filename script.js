@@ -20,14 +20,21 @@ windowsPromise.then(listAllTabs,onError)
 
 function listAllTabs(browserWindows) {
     for(browserWindow of browserWindows) {
-         console.log(`${browserWindow.id} ${browserWindow.title}`)
+        console.log(`${browserWindow.id} ${browserWindow.title}`)
 
-        //first tab should be window title, or maybe active tab?
+        //create window entry
+        var we = document.createElement('div')
+        we.classList.add("win-entry")
+
+        //set window title, append to entry
+        var wt = document.createElement('div')
+        wt.classList.add("win-title")
+        wt.innerHTML = browserWindow.title
+        we.appendChild(wt)
+
+        //create tab list
         let tl = document.createElement('div')
         tl.classList.add("tab-list")
-        //append to some struct in dom, list maybe?
-        //start retrieving tabs
-        //iterate over tabs:
         for(tab of browserWindow.tabs) {
             let t = tab.title
             let u = tab.url
@@ -44,7 +51,9 @@ function listAllTabs(browserWindows) {
             tl.appendChild(entry)
         }
 
-        wl.appendChild(tl)       
+        we.appendChild(tl)
+
+        wl.appendChild(we)       
     }
 }
 
