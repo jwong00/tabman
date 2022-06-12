@@ -1,7 +1,29 @@
-.tab-list {
-  margin-left: 80px;
+#win-list {
+  color: #BEB7AB;
+  font-family: "1785 GLC Baskerville", "Book Antiqua", serif;
 }
 
 .win-title {
   font: bold;
+  font-size: 2em;
+}
+
+.tab-list {
+  margin-left: 200px;
+}
+
+.tab-entry {
+  font-family: "DejaVu Sans Mono","Proxima Nova","Helvetica",monospace;
+}
+
+a {
+  color: #BEB7AB;
+}
+
+a:hover {
+ color: #7C997A;
+}
+
+body {
+  background-color: #282827;
 }

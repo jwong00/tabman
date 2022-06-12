@@ -40,7 +40,7 @@ function listAllTabs(browserWindows) {
             let u = tab.url
             let i = tab.id
             
-            let str = `${i} ${t} ${u}`
+            let str = `${i} <a href="${u}">${t}</a> <<a href="${u}">${u}</a>>`
 
             // console.log(`   ${str}`)
 
