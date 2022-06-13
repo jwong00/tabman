@@ -35,12 +35,15 @@ function listAllTabs(browserWindows) {
         //create tab list
         let tl = document.createElement('div')
         tl.classList.add("tab-list")
+
+        //creat tab entries
         for(tab of browserWindow.tabs) {
             let t = tab.title
             let u = tab.url
             let i = tab.id
             
-            let str = `${i} <a href="${u}">${t}</a> <<a href="${u}">${u}</a>>`
+            let str = 
+            `<input type="checkbox" id="${i}" value="${u}"> <label for="${i}">${t}</label> <<a href="${u}">${u}</a>>`;
 
             // console.log(`   ${str}`)
 
