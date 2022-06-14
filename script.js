@@ -38,12 +38,12 @@ function listAllTabs(browserWindows) {
 
         //creat tab entries
         for(tab of browserWindow.tabs) {
-            let t = tab.title
+            let t = convertToPlainText(tab.title)
             let u = tab.url
             let i = tab.id
             
             let str = 
-            `<input type="checkbox" id="${i}" value="${u}"> <label for="${i}">${t}</label> <<a href="${u}">${u}</a>>`;
+            `<input type="checkbox" id="${i}" value="${u}"> <label for=${i}>${t}</label> <<a href="${u}">${u}</a>>`;
 
             // console.log(`   ${str}`)
 
@@ -62,6 +62,17 @@ function listAllTabs(browserWindows) {
 
 function onError() {
     console.log("error!")
+}
+
+function convertToPlainText(str) {
+    str.replace('&','\u0026')
+    str.replace('<','\u003c')
+    str.replace('>','\u003e')
+    str.replace('"','\u0022')
+
+    console.log(str)
+
+    return str
 }
 
 // document.appendChild(wl);

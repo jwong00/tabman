@@ -1,11 +1,11 @@
 #win-list {
   color: #BEB7AB;
-  font-family: "1785 GLC Baskerville", "Book Antiqua", serif;
 }
 
 .win-title {
   font: bold;
-  font-size: 2em;
+  font-family: "1785 GLC Baskerville", "Book Antiqua", serif;
+  font-size: 4em;
 }
 
 .tab-list {
@@ -14,6 +14,7 @@
 
 .tab-entry {
   font-family: "DejaVu Sans Mono","Proxima Nova","Helvetica",monospace;
+  font-size: 1em;
 }
 
 a {
@@ -26,4 +27,31 @@ a:hover {
 
 body {
   background-color: #282827;
+}
+
+input {
+  -webkit-appearnce: none;
+  appearance: none;
+}
+
+input[type="checkbox"] {
+  position: relative;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #BEB7AB;
+  vertical-align: -4px;
+  color: #BEB7AB;
+}
+
+input[type="checkbox"]::before {
+  content: "✔";
+  position: absolute;
+  font-size: 1.2em;
+  right: -1px;
+  top: -0.4em;
+  visibility: hidden;
+}
+
+input[type="checkbox"]:checked::before {
+  visibility: visible;
 }
