@@ -36,28 +36,34 @@ function listAllTabs(browserWindows) {
         let tl = document.createElement('div')
         tl.classList.add("tab-list")
 
-        //creat tab entries
+        //create tab entries
         for(tab of browserWindow.tabs) {
             let i = tab.id
             let t = tab.title
             let u = tab.url
             
+            //init tab entry
             let entry = document.createElement('div')
             entry.classList.add("tab-entry")
 
+            //checkbox
             let c = document.createElement('input')
             c.setAttribute("type","checkbox")
             c.setAttribute("id",i)
             c.setAttribute("value",u)
             entry.append(c)
+
             entry.append(' ')
 
+            //label (tab title)
             let l = document.createElement('label')
             l.setAttribute("for",i)
             l.textContent = t
             entry.append(l)
+
             entry.append(' ')
 
+            //url
             let a = document.createElement('a')
             a.setAttribute("href",u)
             a.textContent = `<${u}>`
@@ -76,6 +82,7 @@ function onError() {
     console.log("error!")
 }
 
+//might be removed soon
 function convertToPlainText(str) {
     str.replace('&','\u0026')
     str.replace('<','\u003c')
