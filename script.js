@@ -94,4 +94,16 @@ function convertToPlainText(str) {
     return str
 }
 
+//SEARCH
+
+const f = document.getElementById('filter')
+
+f.addEventListener('input',searchHandler)
+
+function searchHandler(event) {
+    if(event.type=='input') 
+        console.log("input detected!")
+    else console.log("wtf!?")
+}
+
 // document.appendChild(wl);
