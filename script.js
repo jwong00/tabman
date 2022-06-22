@@ -18,6 +18,10 @@ console.log(wl)
 
 windowsPromise.then(listAllTabs,onError)
 
+//data struct (current array) for storing tab info
+var list = Array()
+
+
 function listAllTabs(browserWindows) {
     for(browserWindow of browserWindows) {
         console.log(`${browserWindow.id} ${browserWindow.title}`)
@@ -42,6 +46,7 @@ function listAllTabs(browserWindows) {
             let t = tab.title
             let u = tab.url
             
+            list.push(t)
             //init tab entry
             let entry = document.createElement('div')
             entry.classList.add("tab-entry")
@@ -75,7 +80,11 @@ function listAllTabs(browserWindows) {
         we.appendChild(tl)
 
         wl.appendChild(we)       
+
     }
+
+
+        console.log(list)
 }
 
 function onError() {
