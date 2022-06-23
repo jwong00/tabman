@@ -96,29 +96,19 @@ function onError() {
     console.log("error!")
 }
 
-//might be removed soon
-function convertToPlainText(str) {
-    str.replace('&','\u0026')
-    str.replace('<','\u003c')
-    str.replace('>','\u003e')
-    str.replace('"','\u0022')
-
-    console.log(str)
-
-    return str
-}
-
 //SEARCH
 
 const f = document.getElementById('filter')
 
 f.addEventListener('input',searchHandler)
 
-function searchHandler(event) {
-    if(event.type=='input') {
+function searchHandler(e) {
+    if(e.type=='input') {
         console.log("input detected!")
-        console.log(input.target.value)
-        const result = fuse.search()
+        console.log(e.target.value)
+        const result = fuse.search(e.target.value)
+        console.log(result)
     }
     else console.log("wtf!?")
+
 }
