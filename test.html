@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TABMAN DEV</title>
-    <script src="script.js" defer></script>
+
+    <script src="./node_modules/fuse.js/dist/fuse.min.js"></script>
+    <script src="script.js" type="module" defer></script>
     <link href="style.css" rel="stylesheet" type="text/css" >
 </head>
 <body>
     <!-- <label for="filter">filter:</label> -->
     <div class = "search-container">
-        <input type="search" id="filter" name="f" placeholder="tab filter...">
+        <input type="search" id="filter" name="q" placeholder="tab filter...">
     </div>
     <div id = "win-list"></div>
     

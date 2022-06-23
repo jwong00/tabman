@@ -1,3 +1,4 @@
+
 // create list of windows
 var windowsPromise = browser.windows.getAll({
     populate: true,
@@ -21,9 +22,14 @@ windowsPromise.then(listAllTabs,onError)
 //data struct (current array) for storing tab info
 var list = Array()
 
+const options = {
+    includeScore: true
+}
+const fuse = new Fuse(list,options)
 
+//should execute on extension start and whenever tabs change, so quite frequently..
 function listAllTabs(browserWindows) {
-    for(browserWindow of browserWindows) {
+    for(var browserWindow of browserWindows) {
         console.log(`${browserWindow.id} ${browserWindow.title}`)
 
         //create window entry
@@ -41,7 +47,7 @@ function listAllTabs(browserWindows) {
         tl.classList.add("tab-list")
 
         //create tab entries
-        for(tab of browserWindow.tabs) {
+        for(var tab of browserWindow.tabs) {
             let i = tab.id
             let t = tab.title
             let u = tab.url
@@ -83,8 +89,7 @@ function listAllTabs(browserWindows) {
 
     }
 
-
-        console.log(list)
+    console.log(list)
 }
 
 function onError() {
@@ -110,9 +115,10 @@ const f = document.getElementById('filter')
 f.addEventListener('input',searchHandler)
 
 function searchHandler(event) {
-    if(event.type=='input') 
+    if(event.type=='input') {
         console.log("input detected!")
+        console.log(input.target.value)
+        const result = fuse.search()
+    }
     else console.log("wtf!?")
 }
-
-// document.appendChild(wl);
