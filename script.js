@@ -23,9 +23,11 @@ windowsPromise.then(listAllTabs,onError)
 var list = Array()
 
 const options = {
-    includeScore: true
+    includeScore: true,
+    includeMatches: true
 }
-const fuse = new Fuse(list,options)
+var fuse = new Fuse(list,options)
+// = new Fuse(list,options)
 
 //should execute on extension start and whenever tabs change, so quite frequently..
 function listAllTabs(browserWindows) {
@@ -53,6 +55,7 @@ function listAllTabs(browserWindows) {
             let u = tab.url
             
             list.push(t)
+        console.log(fuse.getIndex().size())
             //init tab entry
             let entry = document.createElement('div')
             entry.classList.add("tab-entry")
@@ -86,9 +89,11 @@ function listAllTabs(browserWindows) {
         we.appendChild(tl)
 
         wl.appendChild(we)       
+        fuse = new Fuse(list,options)
 
     }
 
+    console.log("list obj:")
     console.log(list)
 }
 
@@ -104,9 +109,12 @@ f.addEventListener('input',searchHandler)
 
 function searchHandler(e) {
     if(e.type=='input') {
-        console.log("input detected!")
+        // console.log("input detected!")
         console.log(e.target.value)
         const result = fuse.search(e.target.value)
+        console.log(fuse.getIndex().size())
+        console.log("search result:")
+        console.log(typeof(result))
         console.log(result)
     }
     else console.log("wtf!?")
