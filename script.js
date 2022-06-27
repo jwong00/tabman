@@ -20,13 +20,17 @@ console.log(wl)
 windowsPromise.then(listAllTabs,onError)
 
 //data struct (current array) for storing tab info
-var list = Array()
+var searchIndex = Array()
 
 const options = {
+    threshold: 0.4,
     includeScore: true,
-    includeMatches: true
+    includeMatches: true,
+    shouldSort: true,
+    fieldNormWeight: 0.5,
+    keys: ['title']
 }
-var fuse = new Fuse(list,options)
+var fuse = new Fuse(searchIndex,options)
 // = new Fuse(list,options)
 
 //should execute on extension start and whenever tabs change, so quite frequently..
@@ -54,16 +58,22 @@ function listAllTabs(browserWindows) {
             let t = tab.title
             let u = tab.url
             
-            list.push(t)
-        console.log(fuse.getIndex().size())
+            let searchIndexEntry = {
+                id: i,
+                title: t,
+                url: u
+            }
+            searchIndex.push(searchIndexEntry)
+
             //init tab entry
             let entry = document.createElement('div')
             entry.classList.add("tab-entry")
+            entry.setAttribute("id",i)
 
             //checkbox
             let c = document.createElement('input')
             c.setAttribute("type","checkbox")
-            c.setAttribute("id",i)
+            // c.setAttribute("id",i)
             c.setAttribute("value",u)
             entry.append(c)
 
@@ -88,13 +98,12 @@ function listAllTabs(browserWindows) {
 
         we.appendChild(tl)
 
-        wl.appendChild(we)       
-        fuse = new Fuse(list,options)
+        wl.appendChild(we) 
+        fuse = new Fuse(searchIndex,options)
 
     }
 
-    console.log("list obj:")
-    console.log(list)
+    console.log(searchIndex)
 }
 
 function onError() {
@@ -108,15 +117,27 @@ const f = document.getElementById('filter')
 f.addEventListener('input',searchHandler)
 
 function searchHandler(e) {
+    // console.log(fuse.getIndex())
     if(e.type=='input') {
-        // console.log("input detected!")
-        console.log(e.target.value)
+        hideAllTabEntries()
         const result = fuse.search(e.target.value)
-        console.log(fuse.getIndex().size())
-        console.log("search result:")
-        console.log(typeof(result))
         console.log(result)
     }
-    else console.log("wtf!?")
+    else console.log("wtf")
+}
 
+//HELPER
+
+function hideAllTabEntries() {
+    let tabEntries = document.getElementsByClassName("tab-entry")
+    for(var tabEntry of tabEntries) {
+        tabEntry.hidden = true
+    }
+}
+
+function showAllTabEntries() {
+    let tabEntries = document.getElementsByClassName("tab-entry")
+    for(var tabEntry of tabEntries) {
+        tabEntry.hidden = false
+    }
 }
