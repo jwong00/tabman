@@ -1,5 +1,5 @@
 //GLOBALS 
-const DEBUG = false
+const DEBUG = true
 const WARN_ERROR = true
 
 // create list of windows
@@ -119,8 +119,9 @@ function searchHandler(e) {
     if(e.type=='input') {
         if(e.target.value.length > 0) {
             hideAllTabEntries()
-            const result = fuse.search(e.target.value)
-            if(DEBUG) console.log(result)
+            const results = fuse.search(e.target.value)
+            if(DEBUG) console.log(results)
+            showResults(results)
         }
         else if(e.target.value.length === 0) {
             showAllTabEntries()
@@ -146,4 +147,18 @@ function showAllTabEntries() {
     for(var tabEntry of tabEntries) {
         tabEntry.hidden = false
     }
+}
+
+function showResults(results) {
+    console.log("START")
+    console.log(results)
+    for(var result of results) {
+        console.log(result)
+        // console.log(result.item.id)
+        showTab(result.item.id)
+    }
+}
+
+function showTab(id) {
+    document.getElementById(id).hidden = false
 }
