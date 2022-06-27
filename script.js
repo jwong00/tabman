@@ -1,3 +1,6 @@
+//GLOBALS 
+const DEBUG = false
+const WARN_ERROR = true
 
 // create list of windows
 var windowsPromise = browser.windows.getAll({
@@ -10,12 +13,7 @@ console.log(windowsPromise)
 
 //get from dom..
 var wl = document.querySelector("#win-list")
-console.log(wl)
-
-// let tl = document.createElement('div')
-// tl.classList.add("tab-list")
-
-// console.log(tl.classList[0])
+if(DEBUG) console.log(wl)
 
 windowsPromise.then(listAllTabs,onError)
 
@@ -103,11 +101,11 @@ function listAllTabs(browserWindows) {
 
     }
 
-    console.log(searchIndex)
+    if(DEBUG) console.log(searchIndex)
 }
 
 function onError() {
-    console.log("error!")
+    if(WARN_ERROR) console.log("error!")
 }
 
 //SEARCH
@@ -119,11 +117,19 @@ f.addEventListener('input',searchHandler)
 function searchHandler(e) {
     // console.log(fuse.getIndex())
     if(e.type=='input') {
-        hideAllTabEntries()
-        const result = fuse.search(e.target.value)
-        console.log(result)
+        if(e.target.value.length > 0) {
+            hideAllTabEntries()
+            const result = fuse.search(e.target.value)
+            if(DEBUG) console.log(result)
+        }
+        else if(e.target.value.length === 0) {
+            showAllTabEntries()
+        }
+        else {
+            if(WARN_ERROR)console.log("wtf")
+        }
     }
-    else console.log("wtf")
+    else if(WARN_ERROR) console.log("wtf")
 }
 
 //HELPER
