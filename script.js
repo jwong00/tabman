@@ -71,7 +71,7 @@ function listAllTabs(browserWindows) {
             //checkbox
             let c = document.createElement('input')
             c.setAttribute("type","checkbox")
-            // c.setAttribute("id",i)
+            c.setAttribute("id",`c${i}`)
             c.setAttribute("value",u)
             entry.append(c)
 
@@ -79,7 +79,7 @@ function listAllTabs(browserWindows) {
 
             //label (tab title)
             let l = document.createElement('label')
-            l.setAttribute("for",i)
+            l.setAttribute("for",`c${i}`)
             l.textContent = t
             entry.append(l)
 
