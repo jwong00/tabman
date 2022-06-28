@@ -8,13 +8,6 @@ var windowsPromise = browser.windows.getAll({
     windowTypes: ["normal"]
 });
 
-
-console.log(windowsPromise)
-
-//get from dom..
-var wl = document.querySelector("#win-list")
-if(DEBUG) console.log(wl)
-
 windowsPromise.then(listAllTabs,onError)
 
 //data struct (current array) for storing tab info
@@ -31,8 +24,13 @@ const options = {
 var fuse = new Fuse(searchIndex,options)
 // = new Fuse(list,options)
 
-//should execute on extension start and whenever tabs change, so quite frequently..
+//should execute on extension start 
+//and whenever tabs change(??????????)
 function listAllTabs(browserWindows) {
+
+    var wl = document.querySelector("#win-list")
+
+    if(DEBUG) console.log(wl)
     for(var browserWindow of browserWindows) {
         console.log(`${browserWindow.id} ${browserWindow.title}`)
 
@@ -104,8 +102,27 @@ function listAllTabs(browserWindows) {
     if(DEBUG) console.log(searchIndex)
 }
 
-function onError() {
-    if(WARN_ERROR) console.log("error!")
+//RELOAD ALL TABS WHEN CERTAIN EVENTS FIRE:
+// browser.tabs.onCreated.addListener(tabModified)
+// browser.tabs.onRemoved.addListener(listAllTabs)
+browser.tabs.onUpdated.addListener(tabModified)
+// browser.tabs.onMoved.addListener(listAllTabs)
+// browser.tabs.onAttached.addListener(listAllTabs)
+// browser.tabs.onDetached.addListener(listAllTabs)
+
+function tabModified(tabId,changeInfo,tab) {
+
+    //test
+    console.log("updated tab: "+ tabId)
+    console.log("changed attributes: ")
+    console.log(changeInfo)
+    console.log("new tab info: ")
+    console.log(tab)
+
+    //get tab entry to change
+    let te = document.getElementById(tabId)
+    console.log(te)
+    // listAllTabs
 }
 
 //SEARCH
@@ -161,4 +178,8 @@ function showResults(results) {
 
 function showTab(id) {
     document.getElementById(id).hidden = false
+}
+
+function onError() {
+    if(WARN_ERROR) console.log("error!")
 }
