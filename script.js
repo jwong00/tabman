@@ -111,18 +111,33 @@ browser.tabs.onUpdated.addListener(tabModified)
 // browser.tabs.onDetached.addListener(listAllTabs)
 
 function tabModified(tabId,changeInfo,tab) {
-
-    //test
-    console.log("updated tab: "+ tabId)
-    console.log("changed attributes: ")
-    console.log(changeInfo)
-    console.log("new tab info: ")
-    console.log(tab)
-
+    
     //get tab entry to change
     let te = document.getElementById(tabId)
-    console.log(te)
-    // listAllTabs
+    te.replaceChildren()
+
+    //checkbox
+    let c = document.createElement('input')
+    c.setAttribute("type","checkbox")
+    c.setAttribute("id",`c${tab.id}`)
+    c.setAttribute("value",tab.url)
+    te.append(c)
+
+    te.append(' ')
+
+    //label
+    let l = document.createElement('label')
+    l.setAttribute("for",`c${tab.id}`)
+    l.textContent = tab.title
+    te.append(l)
+
+    te.append(' ')
+
+    //url
+    let a = document.createElement('a')
+    a.setAttribute("href",tab.url)
+    a.textContent = `<${tab.url}>`
+    te.append(a)
 }
 
 //SEARCH
