@@ -105,12 +105,12 @@ function listAllTabs(browserWindows) {
 //RELOAD ALL TABS WHEN CERTAIN EVENTS FIRE:
 // browser.tabs.onCreated.addListener(tabModified)
 // browser.tabs.onRemoved.addListener(listAllTabs)
-browser.tabs.onUpdated.addListener(tabModified)
+browser.tabs.onUpdated.addListener(onUpdatedHandler)
 // browser.tabs.onMoved.addListener(listAllTabs)
 // browser.tabs.onAttached.addListener(listAllTabs)
 // browser.tabs.onDetached.addListener(listAllTabs)
 
-function tabModified(tabId,changeInfo,tab) {
+function onUpdatedHandler(tabId,changeInfo,tab) {
     
     //get tab entry to change
     let te = document.getElementById(tabId)
