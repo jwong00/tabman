@@ -37,6 +37,7 @@ function listAllTabs(browserWindows) {
         //create window entry
         var we = document.createElement('div')
         we.classList.add("win-entry")
+        we.setAttribute("id",`w${browserWindow.id}`)
 
         //set window title, append to entry
         var wt = document.createElement('div')
@@ -103,12 +104,21 @@ function listAllTabs(browserWindows) {
 }
 
 //RELOAD ALL TABS WHEN CERTAIN EVENTS FIRE:
-// browser.tabs.onCreated.addListener(tabModified)
+browser.tabs.onCreated.addListener(onCreatedHandler)
 // browser.tabs.onRemoved.addListener(listAllTabs)
 browser.tabs.onUpdated.addListener(onUpdatedHandler)
 // browser.tabs.onMoved.addListener(listAllTabs)
 // browser.tabs.onAttached.addListener(listAllTabs)
 // browser.tabs.onDetached.addListener(listAllTabs)
+
+function onCreatedHandler(tab) {
+    console.log(tab.id)
+    console.log(tab.windowId)
+
+    let we = document.getElementById(`w${tab.windowId}`)
+    console.log("DEBUG")
+    console.log(we)
+}
 
 function onUpdatedHandler(tabId,changeInfo,tab) {
     
