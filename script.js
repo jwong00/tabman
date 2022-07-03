@@ -48,6 +48,7 @@ function listAllTabs(browserWindows) {
         //create tab list
         let tl = document.createElement('div')
         tl.classList.add("tab-list")
+        tl.setAttribute("id",`t${browserWindow.id}`)
 
         //create tab entries
         for(var tab of browserWindow.tabs) {
@@ -105,7 +106,7 @@ function listAllTabs(browserWindows) {
 
 //RELOAD ALL TABS WHEN CERTAIN EVENTS FIRE:
 browser.tabs.onCreated.addListener(onCreatedHandler)
-// browser.tabs.onRemoved.addListener(listAllTabs)
+browser.tabs.onRemoved.addListener(onRemovedHandler)
 browser.tabs.onUpdated.addListener(onUpdatedHandler)
 // browser.tabs.onMoved.addListener(listAllTabs)
 // browser.tabs.onAttached.addListener(listAllTabs)
@@ -115,9 +116,75 @@ function onCreatedHandler(tab) {
     console.log(tab.id)
     console.log(tab.windowId)
 
+    //check if window-entry and its child tab-list exist:
     let we = document.getElementById(`w${tab.windowId}`)
-    console.log("DEBUG")
-    console.log(we)
+    if(we===null) {
+        //make window entry
+        
+    }
+
+    let tl = document.getElementById(`t${tab.windowId}`)
+    tl.append(createTabEntry(tab))
+}
+
+function onRemovedHandler(tabId,removeInfo) {
+    const tabEntry = document.getElementById(tabId)
+    tabEntry.remove()
+    if(removeInfo.isWindowClosing) {
+        const windowEntry = document.getElementById(`w${removeInfo.windowId}`)
+        windowEntry.remove()
+    }
+}
+
+function createWindowEntry(tab) {
+    let we = document.createElement('div')
+    we.classList.add("win-entry")
+    we.setAttribute("id",`w${tab.windowId}`)
+    
+}
+
+function createTabEntry(tab) {
+    let i = tab.id
+    let t = tab.title
+    let u = tab.url
+    
+    let searchIndexEntry = {
+        id: i,
+        title: t,
+        url: u
+    }
+    searchIndex.push(searchIndexEntry)
+
+    //init tab entry
+    let entry = document.createElement('div')
+    entry.classList.add("tab-entry")
+    entry.setAttribute("id",i)
+
+    //checkbox
+    let c = document.createElement('input')
+    c.setAttribute("type","checkbox")
+    c.setAttribute("id",`c${i}`)
+    c.setAttribute("value",u)
+    entry.append(c)
+
+    entry.append(' ')
+
+    //label (tab title)
+    let l = document.createElement('label')
+    l.setAttribute("for",`c${i}`)
+    l.textContent = t
+    entry.append(l)
+
+    entry.append(' ')
+
+    //url
+    let a = document.createElement('a')
+    a.setAttribute("href",u)
+    a.textContent = `<${u}>`
+    entry.append(a)
+
+    return entry
+
 }
 
 function onUpdatedHandler(tabId,changeInfo,tab) {
