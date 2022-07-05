@@ -120,11 +120,13 @@ function onCreatedHandler(tab) {
     let we = document.getElementById(`w${tab.windowId}`)
     if(we===null) {
         //make window entry
-        
+        we = createWindowEntry(tab)
     }
 
-    let tl = document.getElementById(`t${tab.windowId}`)
-    tl.append(createTabEntry(tab))
+    // let wl = document.getElementById("win-list")
+    let wl = document.querySelector("#win-list")
+    wl.appendChild(we)
+
 }
 
 function onRemovedHandler(tabId,removeInfo) {
@@ -140,6 +142,17 @@ function createWindowEntry(tab) {
     let we = document.createElement('div')
     we.classList.add("win-entry")
     we.setAttribute("id",`w${tab.windowId}`)
+
+    let wt = document.createElement('div')
+    wt.classList.add("win-title")
+    wt.innerHTML = tab.title
+    we.appendChild(wt)
+
+    let tl = document.createElement('div')
+    tl.classList.add("tab-list")
+    tl.setAttribute("id",`t${tab.windowId}`)
+
+    return we
     
 }
 
