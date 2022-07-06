@@ -113,12 +113,8 @@ browser.tabs.onUpdated.addListener(onUpdatedHandler)
 // browser.tabs.onDetached.addListener(listAllTabs)
 
 function onCreatedHandler(tab) {
-    console.log(tab.id)
-    console.log(tab.windowId)
-
     //check if window-entry and its child tab-list exist:
     let we = document.getElementById(`w${tab.windowId}`)
-    console.log(we)
     if(we===null) {
         //make window entry
         we = createWindowEntry(tab)
@@ -127,13 +123,8 @@ function onCreatedHandler(tab) {
     }
 
     let tl = document.getElementById(`t${tab.windowId}`)
-    console.log(tl)
     tl.appendChild(createTabEntry(tab))
-    
-
-
     // let wl = document.getElementById("win-list")
-
 }
 
 function onRemovedHandler(tabId,removeInfo) {
