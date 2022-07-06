@@ -118,14 +118,21 @@ function onCreatedHandler(tab) {
 
     //check if window-entry and its child tab-list exist:
     let we = document.getElementById(`w${tab.windowId}`)
+    console.log(we)
     if(we===null) {
         //make window entry
         we = createWindowEntry(tab)
+        let wl = document.querySelector("#win-list")
+        wl.appendChild(we)
     }
 
+    let tl = document.getElementById(`t${tab.windowId}`)
+    console.log(tl)
+    tl.appendChild(createTabEntry(tab))
+    
+
+
     // let wl = document.getElementById("win-list")
-    let wl = document.querySelector("#win-list")
-    wl.appendChild(we)
 
 }
 
@@ -151,6 +158,7 @@ function createWindowEntry(tab) {
     let tl = document.createElement('div')
     tl.classList.add("tab-list")
     tl.setAttribute("id",`t${tab.windowId}`)
+    we.appendChild(tl)
 
     return we
     
