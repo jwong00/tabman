@@ -53,7 +53,7 @@ function listAllTabs(browserWindows) {
         //create tab entries
         for(var tab of browserWindow.tabs) {
             let i = tab.id
-            let t = tab.title
+            let t = `${tab.index} ${tab.title}`
             let u = tab.url
             
             let searchIndexEntry = {
@@ -109,8 +109,21 @@ browser.tabs.onCreated.addListener(onCreatedHandler)
 browser.tabs.onRemoved.addListener(onRemovedHandler)
 browser.tabs.onUpdated.addListener(onUpdatedHandler)
 // browser.tabs.onMoved.addListener(listAllTabs)
-// browser.tabs.onAttached.addListener(listAllTabs)
-// browser.tabs.onDetached.addListener(listAllTabs)
+browser.tabs.onAttached.addListener(onAttachedHandler)
+browser.tabs.onDetached.addListener(onDetachedHandler)
+
+function onAttachedHandler(tabId, attachInfo) {
+
+    console.log(tabId)
+    let tl = document.getElementById(`t${attachInfo.neWindowId}`)
+    
+    // tl.appendChild(createTabEntry(tabs.get(tabId)))
+    tabs.get(tabId).then(createTabEntry(tab))
+}
+
+function onDetachedHandler(tabId, detachInfo) {
+    document.getElementById(tabId).remove()
+}
 
 function onCreatedHandler(tab) {
     //check if window-entry and its child tab-list exist:
@@ -158,6 +171,7 @@ function createWindowEntry(tab) {
 function createTabEntry(tab) {
     let i = tab.id
     let t = tab.title
+    // let t = `${tab.index} ${tab.title}`
     let u = tab.url
     
     let searchIndexEntry = {
