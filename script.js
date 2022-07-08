@@ -112,13 +112,19 @@ browser.tabs.onUpdated.addListener(onUpdatedHandler)
 browser.tabs.onAttached.addListener(onAttachedHandler)
 browser.tabs.onDetached.addListener(onDetachedHandler)
 
-function onAttachedHandler(tabId, attachInfo) {
+async function onAttachedHandler(tabId, attachInfo) {
 
     console.log(tabId)
     let tl = document.getElementById(`t${attachInfo.neWindowId}`)
     
     // tl.appendChild(createTabEntry(tabs.get(tabId)))
-    tabs.get(tabId).then(createTabEntry(tab))
+    try { 
+        let t = await browser.tabs.get(tabId).then(createTabEntry)
+        console.log(t)
+    }
+    catch(error) {
+        console.log(error)
+    }
 }
 
 function onDetachedHandler(tabId, detachInfo) {
