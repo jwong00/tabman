@@ -115,12 +115,13 @@ browser.tabs.onDetached.addListener(onDetachedHandler)
 async function onAttachedHandler(tabId, attachInfo) {
 
     console.log(tabId)
-    let tl = document.getElementById(`t${attachInfo.neWindowId}`)
+    let tl = document.getElementById(`t${attachInfo.newWindowId}`)
     
     // tl.appendChild(createTabEntry(tabs.get(tabId)))
     try { 
-        let t = await browser.tabs.get(tabId).then(createTabEntry)
-        console.log(t)
+        let t = await browser.tabs.get(tabId).then(onCreatedHandler)
+        // console.log(t)
+
     }
     catch(error) {
         console.log(error)
@@ -142,8 +143,32 @@ function onCreatedHandler(tab) {
     }
 
     let tl = document.getElementById(`t${tab.windowId}`)
-    tl.appendChild(createTabEntry(tab))
+    //somehow get the TAB AFTER to INSERT BEFORE using:
+    //node.insertBefore
+
+    let ta = getTabAfter(tab)
+    // let t = document.getElementById(tab.id)
+    let t = createTabEntry(tab)
+
+    if(ta==null) tl.appendChild(createTabEntry(tab))
+    else tl.insertBefore(t,ta)
+
+
+
     // let wl = document.getElementById("win-list")
+}
+
+async function getTabAfter(tab) {
+    try {
+        let w = await browser.windows.get(tab.windowId, {populate: true})
+
+        //get TAB ENTRY ELEMENT HERE then return it
+        return w.tabs[tab.index+1]
+    }
+    catch(error) {
+        console.log(error)
+    }
+
 }
 
 function onRemovedHandler(tabId,removeInfo) {
