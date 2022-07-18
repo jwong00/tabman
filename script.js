@@ -104,7 +104,6 @@ function listAllTabs(browserWindows) {
     if(DEBUG) console.log(searchIndex)
 }
 
-//RELOAD ALL TABS WHEN CERTAIN EVENTS FIRE:
 browser.tabs.onCreated.addListener(onCreatedHandler)
 browser.tabs.onRemoved.addListener(onRemovedHandler)
 browser.tabs.onUpdated.addListener(onUpdatedHandler)
@@ -133,6 +132,7 @@ function onDetachedHandler(tabId, detachInfo) {
 }
 
 function onCreatedHandler(tab) {
+    console.log(tab)
     //check if window-entry and its child tab-list exist:
     let we = document.getElementById(`w${tab.windowId}`)
     if(we===null) {
@@ -146,13 +146,20 @@ function onCreatedHandler(tab) {
     //somehow get the TAB AFTER to INSERT BEFORE using:
     //node.insertBefore
 
+    //get the tab after, this object is an actual TAB object
     let ta = getTabAfter(tab)
     // let t = document.getElementById(tab.id)
     let t = createTabEntry(tab)
 
-    if(ta==null) tl.appendChild(createTabEntry(tab))
-    else tl.insertBefore(t,ta)
+    console.log("here")
 
+    //probably need to get the tab-ENTRY element here
+    //then pass THAT into t.insertBefore(..)
+    if(ta==null) tl.appendChild(createTabEntry(tab))
+    //this next line should always be valid
+    //assuming my understanding that a tab's id shouldn't 
+    //change after it's been made
+    else tl.insertBefore(t,document.getElementById(ta.id))
 
 
     // let wl = document.getElementById("win-list")
