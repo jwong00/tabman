@@ -107,9 +107,26 @@ function listAllTabs(browserWindows) {
 browser.tabs.onCreated.addListener(onCreatedHandler)
 browser.tabs.onRemoved.addListener(onRemovedHandler)
 browser.tabs.onUpdated.addListener(onUpdatedHandler)
-// browser.tabs.onMoved.addListener(listAllTabs)
+browser.tabs.onMoved.addListener(onMovedHandler)
 browser.tabs.onAttached.addListener(onAttachedHandler)
 browser.tabs.onDetached.addListener(onDetachedHandler)
+
+async function onMovedHandler(tabId, moveInfo) {
+    let tab = await browser.tabs.get(tabId)
+    let tabEntryElement = document.getElementById(tabId)
+
+    let tabAfter = await getTabAfter(tab)
+    let tabEntryElementAfter = document.getElementById(tabAfter.id)
+
+    //The window whose windowId == moveInfo.windowId
+    //SHOULD ALREADY EXIST(?)
+    //
+    let tabList = document.getElementById(`t${moveInfo.windowId}`)
+
+    if(tabAfter==null) tabList.appendChild(tabEntryElement)
+    else tabList.insertBefore(tabEntryElement,tabEntryElementAfter)
+
+}
 
 async function onAttachedHandler(tabId, attachInfo) {
 
@@ -131,7 +148,7 @@ function onDetachedHandler(tabId, detachInfo) {
     document.getElementById(tabId).remove()
 }
 
-function onCreatedHandler(tab) {
+async function onCreatedHandler(tab) {
     console.log(tab)
     //check if window-entry and its child tab-list exist:
     let we = document.getElementById(`w${tab.windowId}`)
@@ -143,18 +160,13 @@ function onCreatedHandler(tab) {
     }
 
     let tl = document.getElementById(`t${tab.windowId}`)
-    //somehow get the TAB AFTER to INSERT BEFORE using:
-    //node.insertBefore
 
-    //get the tab after, this object is an actual TAB object
-    let ta = getTabAfter(tab)
-    // let t = document.getElementById(tab.id)
+    let ta = await getTabAfter(tab)
     let t = createTabEntry(tab)
 
-    console.log("here")
+    // console.log("TAB AFTER:")
+    // console.log(ta)
 
-    //probably need to get the tab-ENTRY element here
-    //then pass THAT into t.insertBefore(..)
     if(ta==null) tl.appendChild(createTabEntry(tab))
     //this next line should always be valid
     //assuming my understanding that a tab's id shouldn't 
