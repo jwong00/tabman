@@ -116,15 +116,17 @@ async function onMovedHandler(tabId, moveInfo) {
     let tabEntryElement = document.getElementById(tabId)
 
     let tabAfter = await getTabAfter(tab)
-    let tabEntryElementAfter = document.getElementById(tabAfter.id)
 
     //The window whose windowId == moveInfo.windowId
     //SHOULD ALREADY EXIST(?)
     //
     let tabList = document.getElementById(`t${moveInfo.windowId}`)
-
+    
     if(tabAfter==null) tabList.appendChild(tabEntryElement)
-    else tabList.insertBefore(tabEntryElement,tabEntryElementAfter)
+    else {
+        let tabEntryElementAfter = document.getElementById(tabAfter.id)
+        tabList.insertBefore(tabEntryElement,tabEntryElementAfter)
+    }
 
 }
 
