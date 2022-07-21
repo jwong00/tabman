@@ -42,7 +42,9 @@ function listAllTabs(browserWindows) {
         //set window title, append to entry
         var wt = document.createElement('div')
         wt.classList.add("win-title")
-        wt.innerHTML = browserWindow.title
+        wt.setAttribute("id", `window-title-${browserWindow.id}`)
+        // wt.innerHTML = browserWindow.title
+        wt.textContent = browserWindow.title
         we.appendChild(wt)
 
         //create tab list
@@ -110,6 +112,13 @@ browser.tabs.onUpdated.addListener(onUpdatedHandler)
 browser.tabs.onMoved.addListener(onMovedHandler)
 browser.tabs.onAttached.addListener(onAttachedHandler)
 browser.tabs.onDetached.addListener(onDetachedHandler)
+browser.tabs.onActivated.addListener(onActivatedListener)
+
+async function onActivatedListener(activeInfo) {
+    let windowTitleElement = document.getElementById(`window-title-${activeInfo.windowId}`)
+    let w = await browser.windows.get(activeInfo.windowId)
+    windowTitleElement.textContent = w.title
+}
 
 async function onMovedHandler(tabId, moveInfo) {
     let tab = await browser.tabs.get(tabId)
@@ -131,15 +140,10 @@ async function onMovedHandler(tabId, moveInfo) {
 }
 
 async function onAttachedHandler(tabId, attachInfo) {
-
-    console.log(tabId)
     let tl = document.getElementById(`t${attachInfo.newWindowId}`)
     
-    // tl.appendChild(createTabEntry(tabs.get(tabId)))
     try { 
         let t = await browser.tabs.get(tabId).then(onCreatedHandler)
-        // console.log(t)
-
     }
     catch(error) {
         console.log(error)
@@ -151,7 +155,6 @@ function onDetachedHandler(tabId, detachInfo) {
 }
 
 async function onCreatedHandler(tab) {
-    console.log(tab)
     //check if window-entry and its child tab-list exist:
     let we = document.getElementById(`w${tab.windowId}`)
     if(we===null) {
@@ -165,9 +168,6 @@ async function onCreatedHandler(tab) {
 
     let ta = await getTabAfter(tab)
     let t = createTabEntry(tab)
-
-    // console.log("TAB AFTER:")
-    // console.log(ta)
 
     if(ta==null) tl.appendChild(createTabEntry(tab))
     //this next line should always be valid
@@ -189,7 +189,6 @@ async function getTabAfter(tab) {
     catch(error) {
         console.log(error)
     }
-
 }
 
 function onRemovedHandler(tabId,removeInfo) {
@@ -209,6 +208,7 @@ function createWindowEntry(tab) {
     let wt = document.createElement('div')
     wt.classList.add("win-title")
     wt.innerHTML = tab.title
+    wt.setAttribute("id" `window-title-${browserWindow.id}`)
     we.appendChild(wt)
 
     let tl = document.createElement('div')
@@ -217,7 +217,6 @@ function createWindowEntry(tab) {
     we.appendChild(tl)
 
     return we
-    
 }
 
 function createTabEntry(tab) {
@@ -262,7 +261,6 @@ function createTabEntry(tab) {
     entry.append(a)
 
     return entry
-
 }
 
 function onUpdatedHandler(tabId,changeInfo,tab) {
@@ -302,7 +300,7 @@ const f = document.getElementById('filter')
 f.addEventListener('input',searchHandler)
 
 function searchHandler(e) {
-    // console.log(fuse.getIndex())
+    
     if(e.type=='input') {
         if(e.target.value.length > 0) {
             hideAllTabEntries()
@@ -337,8 +335,6 @@ function showAllTabEntries() {
 }
 
 function showResults(results) {
-    console.log("START")
-    console.log(results)
     for(var result of results) {
         console.log(result)
         // console.log(result.item.id)
