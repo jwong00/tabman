@@ -116,8 +116,8 @@ browser.tabs.onActivated.addListener(onActivatedListener)
 
 async function onActivatedListener(activeInfo) {
     let windowTitleElement = document.getElementById(`window-title-${activeInfo.windowId}`)
-    let w = await browser.windows.get(activeInfo.windowId)
-    windowTitleElement.textContent = w.title
+    let window = await browser.windows.get(activeInfo.windowId)
+    windowTitleElement.textContent = window.title
 }
 
 async function onMovedHandler(tabId, moveInfo) {
@@ -129,21 +129,22 @@ async function onMovedHandler(tabId, moveInfo) {
     //The window whose windowId == moveInfo.windowId
     //SHOULD ALREADY EXIST(?)
     //
-    let tabList = document.getElementById(`t${moveInfo.windowId}`)
+    let tabListElement = document.getElementById(`t${moveInfo.windowId}`)
     
-    if(tabAfter==null) tabList.appendChild(tabEntryElement)
+    if(tabAfter==null) tabListElement.appendChild(tabEntryElement)
     else {
         let tabEntryElementAfter = document.getElementById(tabAfter.id)
-        tabList.insertBefore(tabEntryElement,tabEntryElementAfter)
+        tabListElement.insertBefore(tabEntryElement,tabEntryElementAfter)
     }
 
 }
 
 async function onAttachedHandler(tabId, attachInfo) {
-    let tl = document.getElementById(`t${attachInfo.newWindowId}`)
+    // let tl = document.getElementById(`t${attachInfo.newWindowId}`)
     
+    console.log("ATTACH DEBUG")
     try { 
-        let t = await browser.tabs.get(tabId).then(onCreatedHandler)
+        await browser.tabs.get(tabId).then(onCreatedHandler)
     }
     catch(error) {
         console.log(error)
@@ -156,27 +157,24 @@ function onDetachedHandler(tabId, detachInfo) {
 
 async function onCreatedHandler(tab) {
     //check if window-entry and its child tab-list exist:
-    let we = document.getElementById(`w${tab.windowId}`)
-    if(we===null) {
+    let windowEntryElement = document.getElementById(`w${tab.windowId}`)
+    if(windowEntryElement===null) {
         //make window entry
-        we = createWindowEntry(tab)
-        let wl = document.querySelector("#win-list")
-        wl.appendChild(we)
+        windowEntryElement = createWindowEntry(tab)
+        let windowListElement = document.querySelector("#win-list")
+        windowListElement.appendChild(windowEntryElement)
     }
 
-    let tl = document.getElementById(`t${tab.windowId}`)
+    let tabListElement = document.getElementById(`t${tab.windowId}`)
 
-    let ta = await getTabAfter(tab)
-    let t = createTabEntry(tab)
+    let tabAfter = await getTabAfter(tab)
+    let tabCurrent = createTabEntry(tab)
 
-    if(ta==null) tl.appendChild(createTabEntry(tab))
+    if(tabAfter==null) tabListElement.appendChild(createTabEntry(tab))
     //this next line should always be valid
     //assuming my understanding that a tab's id shouldn't 
     //change after it's been made
-    else tl.insertBefore(t,document.getElementById(ta.id))
-
-
-    // let wl = document.getElementById("win-list")
+    else tabListElement.insertBefore(tabCurrent,document.getElementById(tabAfter.id))
 }
 
 async function getTabAfter(tab) {
@@ -201,114 +199,114 @@ function onRemovedHandler(tabId,removeInfo) {
 }
 
 function createWindowEntry(tab) {
-    let we = document.createElement('div')
-    we.classList.add("win-entry")
-    we.setAttribute("id",`w${tab.windowId}`)
+    let windowEntryElement = document.createElement('div')
+    windowEntryElement.classList.add("win-entry")
+    windowEntryElement.setAttribute("id",`w${tab.windowId}`)
 
-    let wt = document.createElement('div')
-    wt.classList.add("win-title")
-    wt.innerHTML = tab.title
-    wt.setAttribute("id" `window-title-${browserWindow.id}`)
-    we.appendChild(wt)
+    let windowTitleElement = document.createElement('div')
+    windowTitleElement.classList.add("win-title")
+    windowTitleElement.innerHTML = tab.title
+    windowTitleElement.setAttribute("id" `window-title-${browserWindow.id}`)
+    windowEntryElement.appendChild(windowTitleElement)
 
-    let tl = document.createElement('div')
-    tl.classList.add("tab-list")
-    tl.setAttribute("id",`t${tab.windowId}`)
-    we.appendChild(tl)
+    let tabListElement = document.createElement('div')
+    tabListElement.classList.add("tab-list")
+    tabListElement.setAttribute("id",`t${tab.windowId}`)
+    windowEntryElement.appendChild(tabListElement)
 
-    return we
+    return windowEntryElement
 }
 
 function createTabEntry(tab) {
-    let i = tab.id
-    let t = tab.title
+    let id = tab.id
+    let title = tab.title
     // let t = `${tab.index} ${tab.title}`
-    let u = tab.url
+    let url = tab.url
     
     let searchIndexEntry = {
-        id: i,
-        title: t,
-        url: u
+        id: id,
+        title: title,
+        url: url
     }
     searchIndex.push(searchIndexEntry)
 
     //init tab entry
-    let entry = document.createElement('div')
-    entry.classList.add("tab-entry")
-    entry.setAttribute("id",i)
+    let tabEntryElement = document.createElement('div')
+    tabEntryElement.classList.add("tab-entry")
+    tabEntryElement.setAttribute("id",id)
 
     //checkbox
-    let c = document.createElement('input')
-    c.setAttribute("type","checkbox")
-    c.setAttribute("id",`c${i}`)
-    c.setAttribute("value",u)
-    entry.append(c)
+    let checkboxElement = document.createElement('input')
+    checkboxElement.setAttribute("type","checkbox")
+    checkboxElement.setAttribute("id",`c${id}`)
+    checkboxElement.setAttribute("value",url)
+    tabEntryElement.append(checkboxElement)
 
-    entry.append(' ')
+    tabEntryElement.append(' ')
 
     //label (tab title)
-    let l = document.createElement('label')
-    l.setAttribute("for",`c${i}`)
-    l.textContent = t
-    entry.append(l)
+    let labelElement = document.createElement('label')
+    labelElement.setAttribute("for",`c${id}`)
+    labelElement.textContent = title
+    tabEntryElement.append(labelElement)
 
-    entry.append(' ')
+    tabEntryElement.append(' ')
 
     //url
-    let a = document.createElement('a')
-    a.setAttribute("href",u)
-    a.textContent = `<${u}>`
-    entry.append(a)
+    let urlElement = document.createElement('a')
+    urlElement.setAttribute("href",url)
+    urlElement.textContent = `<${url}>`
+    tabEntryElement.append(urlElement)
 
-    return entry
+    return tabEntryElement
 }
 
 function onUpdatedHandler(tabId,changeInfo,tab) {
     
     //get tab entry to change
-    let te = document.getElementById(tabId)
-    te.replaceChildren()
+    let tabEntryElement = document.getElementById(tabId)
+    tabEntryElement.replaceChildren()
 
     //checkbox
-    let c = document.createElement('input')
-    c.setAttribute("type","checkbox")
-    c.setAttribute("id",`c${tab.id}`)
-    c.setAttribute("value",tab.url)
-    te.append(c)
+    let checkboxElement = document.createElement('input')
+    checkboxElement.setAttribute("type","checkbox")
+    checkboxElement.setAttribute("id",`c${tab.id}`)
+    checkboxElement.setAttribute("value",tab.url)
+    tabEntryElement.append(checkboxElement)
 
-    te.append(' ')
+    tabEntryElement.append(' ')
 
     //label
-    let l = document.createElement('label')
-    l.setAttribute("for",`c${tab.id}`)
-    l.textContent = tab.title
-    te.append(l)
+    let labelElement = document.createElement('label')
+    labelElement.setAttribute("for",`c${tab.id}`)
+    labelElement.textContent = tab.title
+    tabEntryElement.append(labelElement)
 
-    te.append(' ')
+    tabEntryElement.append(' ')
 
     //url
-    let a = document.createElement('a')
-    a.setAttribute("href",tab.url)
-    a.textContent = `<${tab.url}>`
-    te.append(a)
+    let urlElement = document.createElement('a')
+    urlElement.setAttribute("href",tab.url)
+    urlElement.textContent = `<${tab.url}>`
+    tabEntryElement.append(urlElement)
 }
 
 //SEARCH
 
-const f = document.getElementById('filter')
+const filter = document.getElementById('filter')
 
-f.addEventListener('input',searchHandler)
+filter.addEventListener('input',searchHandler)
 
-function searchHandler(e) {
+function searchHandler(event) {
     
-    if(e.type=='input') {
-        if(e.target.value.length > 0) {
+    if(event.type=='input') {
+        if(event.target.value.length > 0) {
             hideAllTabEntries()
-            const results = fuse.search(e.target.value)
+            const results = fuse.search(event.target.value)
             if(DEBUG) console.log(results)
             showResults(results)
         }
-        else if(e.target.value.length === 0) {
+        else if(event.target.value.length === 0) {
             showAllTabEntries()
         }
         else {
