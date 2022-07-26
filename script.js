@@ -55,7 +55,7 @@ function listAllTabs(browserWindows) {
         //create tab entries
         for(var tab of browserWindow.tabs) {
             let i = tab.id
-            let t = `${tab.index} ${tab.title}`
+            let t = `${tab.title}`
             let u = tab.url
             
             let searchIndexEntry = {
