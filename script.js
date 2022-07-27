@@ -1,6 +1,50 @@
-//GLOBALS 
+
+//==============================================================
+//                                                              
+//   ####    ##       #####   #####     ###    ##       ####  
+//  ##       ##      ##   ##  ##  ##   ## ##   ##      ##     
+//  ##  ###  ##      ##   ##  #####   ##   ##  ##       ###   
+//  ##   ##  ##      ##   ##  ##  ##  #######  ##         ##  
+//   ####    ######   #####   #####   ##   ##  ######  ####   
+//                                                              
+//==============================================================
+
 const DEBUG = true
 const WARN_ERROR = true
+
+
+//====================================================
+//                                                    
+//   ####  #####    ###    #####     ####  ##   ##  
+//  ##     ##      ## ##   ##  ##   ##     ##   ##  
+//   ###   #####  ##   ##  #####    ##     #######  
+//     ##  ##     #######  ##  ##   ##     ##   ##  
+//  ####   #####  ##   ##  ##   ##   ####  ##   ##  
+//                                                    
+//====================================================
+
+//data struct (current array) for storing tab info
+var searchIndex = Array()
+
+const options = {
+    threshold: 0.4,
+ includeMatches: true,
+    shouldSort: true,
+    fieldNormWeight: 0.5,
+    keys: ['title']
+}
+var fuse = new Fuse(searchIndex,options)
+// = new Fuse(list,options)
+
+//===============================
+//                               
+//  ##  ##     ##  ##  ######  
+//  ##  ####   ##  ##    ##    
+//  ##  ##  ## ##  ##    ##    
+//  ##  ##    ###  ##    ##    
+//  ##  ##     ##  ##    ##    
+//                               
+//===============================
 
 // create list of windows
 var windowsPromise = browser.windows.getAll({
@@ -9,21 +53,6 @@ var windowsPromise = browser.windows.getAll({
 });
 
 windowsPromise.then(listAllTabs,onError)
-
-//data struct (current array) for storing tab info
-var searchIndex = Array()
-
-const options = {
-    threshold: 0.4,
-    includeScore: true,
-    includeMatches: true,
-    shouldSort: true,
-    fieldNormWeight: 0.5,
-    keys: ['title']
-}
-var fuse = new Fuse(searchIndex,options)
-// = new Fuse(list,options)
-
 //should execute on extension start 
 //and whenever tabs change(??????????)
 function listAllTabs(browserWindows) {
@@ -105,6 +134,16 @@ function listAllTabs(browserWindows) {
 
     if(DEBUG) console.log(searchIndex)
 }
+
+//========================================================================
+//                                                                        
+//  ##   ##    ###    ##     ##  ####    ##      #####  #####     ####  
+//  ##   ##   ## ##   ####   ##  ##  ##  ##      ##     ##  ##   ##     
+//  #######  ##   ##  ##  ## ##  ##  ##  ##      #####  #####     ###   
+//  ##   ##  #######  ##    ###  ##  ##  ##      ##     ##  ##      ##  
+//  ##   ##  ##   ##  ##     ##  ####    ######  #####  ##   ##  ####   
+//                                                                        
+//========================================================================
 
 browser.tabs.onCreated.addListener(onCreatedHandler)
 browser.tabs.onRemoved.addListener(onRemovedHandler)
