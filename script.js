@@ -12,6 +12,8 @@
 const DEBUG = true
 const WARN_ERROR = true
 
+var SELECTED = new Map()
+
 
 //====================================================
 //                                                    
@@ -104,6 +106,7 @@ function listAllTabs(browserWindows) {
             c.setAttribute("type","checkbox")
             c.setAttribute("id",`c${i}`)
             c.setAttribute("value",u)
+            c.addEventListener('change',checkboxHandler)
             entry.append(c)
 
             entry.append(' ')
@@ -151,9 +154,15 @@ browser.tabs.onUpdated.addListener(onUpdatedHandler)
 browser.tabs.onMoved.addListener(onMovedHandler)
 browser.tabs.onAttached.addListener(onAttachedHandler)
 browser.tabs.onDetached.addListener(onDetachedHandler)
-browser.tabs.onActivated.addListener(onActivatedListener)
+browser.tabs.onActivated.addListener(onActivatedHandler)
 
-async function onActivatedListener(activeInfo) {
+function checkboxHandler(e) {
+    if(e.target.checked===true) SELECTED.set(e.target.id,e.target)
+    else SELECTED.delete(e.target.id)
+    console.log(SELECTED)
+}
+
+async function onActivatedHandler(activeInfo) {
     let windowTitleElement = document.getElementById(`window-title-${activeInfo.windowId}`)
     let window = await browser.windows.get(activeInfo.windowId)
     windowTitleElement.textContent = window.title
