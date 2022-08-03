@@ -38,6 +38,12 @@
   font-size: 1em;
 }
 
+.search-container {
+  display: block grid;
+  /* align-items: center; */
+  /* position: sticky; */
+}
+
 a {
   color: var(--main);
 }
@@ -78,13 +84,11 @@ input[type="checkbox"]:checked::before {
 }
 
 input[type="search"] {
-  
   font-family: "DejaVu Sans Mono","Proxima Nova","Helvetica",monospace;
   font-size: 1em;
   text-align: center;
-  align-items: center;
+  /* align-items: center; */
   margin: 0 auto;
-  display: block;
   background-color: var(--bg);
   border-style: solid;
   border-color: var(--main);
@@ -93,6 +97,5 @@ input[type="search"] {
 
 input[type="search"]:focus {
   outline-style: none;
-
   font-size: 4em;
 }
