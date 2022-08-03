@@ -39,9 +39,10 @@
 }
 
 .search-container {
-  display: block grid;
-  /* align-items: center; */
-  /* position: sticky; */
+  display: block flex;
+  width: 100%;
+  justify-content: center;
+  position: fixed;
 }
 
 a {
@@ -54,6 +55,7 @@ a:hover {
 
 body {
   background-color: var(--bg); 
+  /* overflow: visible; */
 }
 
 input {
@@ -88,7 +90,8 @@ input[type="search"] {
   font-size: 1em;
   text-align: center;
   /* align-items: center; */
-  margin: 0 auto;
+  /* margin: 0 auto; */
+  /* position: fixed; */
   background-color: var(--bg);
   border-style: solid;
   border-color: var(--main);
