@@ -19,6 +19,15 @@
   color: var(--main);
 }
 
+button {
+  background-color: var(--bg);
+  border-color: var(--main);
+  color: var(--main);
+
+  border-style: solid;
+  text-align: center;
+}
+
 .box {
   width: 100%;
 }
@@ -43,6 +52,7 @@
   width: 100%;
   justify-content: center;
   position: fixed;
+  z-index: 10;
 }
 
 a {
