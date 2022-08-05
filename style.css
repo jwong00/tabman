@@ -2,6 +2,7 @@
   --main: #BEB7AB;
   --bg: #282827;
   --link: #7C997A;
+  --search-z-index: 10;
 
 }
 
@@ -52,7 +53,7 @@ button {
   width: 100%;
   justify-content: center;
   position: fixed;
-  z-index: 10;
+  z-index: var(--search-z-index);
 }
 
 a {
@@ -106,6 +107,7 @@ input[type="search"] {
   border-style: solid;
   border-color: var(--main);
   color: var(--main);
+  z-index: var(--search-z-index)+1;
 }
 
 input[type="search"]:focus {

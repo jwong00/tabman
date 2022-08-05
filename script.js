@@ -156,6 +156,9 @@ browser.tabs.onAttached.addListener(onAttachedHandler)
 browser.tabs.onDetached.addListener(onDetachedHandler)
 browser.tabs.onActivated.addListener(onActivatedHandler)
 
+deleteButton = document.getElementById("delete-button")
+deleteButton.addListener()
+
 function checkboxHandler(e) {
     if(e.target.checked===true) SELECTED.set(e.target.id,e.target)
     else SELECTED.delete(e.target.id)
