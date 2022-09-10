@@ -24,7 +24,6 @@ button {
   background-color: var(--bg);
   border-color: var(--main);
   color: var(--main);
-
   border-style: solid;
   text-align: center;
 }
