@@ -30,7 +30,7 @@ var searchIndex = Array()
 
 const options = {
     threshold: 0.4,
- includeMatches: true,
+    includeMatches: true,
     shouldSort: true,
     fieldNormWeight: 0.5,
     keys: ['title']
@@ -151,13 +151,27 @@ function listAllTabs(browserWindows) {
 browser.tabs.onCreated.addListener(onCreatedHandler)
 browser.tabs.onRemoved.addListener(onRemovedHandler)
 browser.tabs.onUpdated.addListener(onUpdatedHandler)
-browser.tabs.onMoved.addListener(onMovedHandler)
 browser.tabs.onAttached.addListener(onAttachedHandler)
 browser.tabs.onDetached.addListener(onDetachedHandler)
 browser.tabs.onActivated.addListener(onActivatedHandler)
+browser.tabs.onMoved.addListener(onMovedHandler)
 
-deleteButton = document.getElementById("delete-button")
-deleteButton.addListener()
+const deleteButton = document.getElementById('delete-button')
+console.log(deleteButton)
+// deleteButton.addEventListener('click',deleteButtonClick)
+deleteButton.onclick = deleteButtonClick
+
+function deleteButtonClick(event) {
+    console.log("DELETION TARGET")
+
+    console.log(SELECTED)
+    //iterate over SELECTED
+    SELECTED.forEach(e=>console.log(e))
+        //for each id, get the tabId
+        //call the tab.remove(tabId), should be in the API..
+
+}
+
 
 function checkboxHandler(e) {
     if(e.target.checked===true) SELECTED.set(e.target.id,e.target)

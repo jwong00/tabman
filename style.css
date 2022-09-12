@@ -26,6 +26,8 @@ button {
   color: var(--main);
   border-style: solid;
   text-align: center;
+  font-family: "DejaVu Sans Mono","Proxima Nova","Helvetica",monospace;
+  font-size: 1em;
 }
 
 .box {
